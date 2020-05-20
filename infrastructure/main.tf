@@ -10,7 +10,7 @@ locals {
   # Which use double underscore for nested app settings instead of colon (:)
   api_app_settings = {
     MSDEPLOY_RENAME_LOCKED_FILES                                = "1"
-    MEMETRICS_DB_Connection_String                              = var.db_connection_string
+    DB_CONNECTION_STRING                                        = var.db_connection_string
     env                                                         = var.env
     log_level                                                   = var.log_level
     PRIMARY_API_KEY                                             = var.primary_api_key
