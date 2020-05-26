@@ -44,18 +44,6 @@ namespace MeMetrics.Api.Controllers
             return new OkObjectResult(result.Result);
         }
 
-        [Route("batch")]
-        [Authorize]
-        [HttpPost]
-        [ApiVersion("1")]
-        [ApiExplorerSettings(GroupName = "v1")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<int>> SaveMessages([FromBody] List<Message> messages)
-        {
-            return BadRequest();
-        }
-
         [Route("metrics")]
         [HttpGet]
         [ApiVersion("1")]
