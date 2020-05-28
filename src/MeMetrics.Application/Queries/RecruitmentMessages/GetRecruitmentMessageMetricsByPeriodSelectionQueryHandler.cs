@@ -12,13 +12,13 @@ using Serilog;
 
 namespace MeMetrics.Application.Queries.RecruitmentMessages
 {
-    public class GetRideMetricsByPeriodSelectionQueryHandler : IRequestHandler<GetRecruitmentMessageMetricsByPeriodSelectionQuery, QueryResult<RecruitmentMetrics>>
+    public class GetRecruitmentMessageMetricsByPeriodSelectionQueryHandler : IRequestHandler<GetRecruitmentMessageMetricsByPeriodSelectionQuery, QueryResult<RecruitmentMessageMetrics>>
     {
         private readonly IRecruitmentMessageRepository _recruitmentMessageRepository;
         private readonly ILogger _logger;
         private readonly IMemoryCache _cache;
 
-        public GetRideMetricsByPeriodSelectionQueryHandler(
+        public GetRecruitmentMessageMetricsByPeriodSelectionQueryHandler(
             IRecruitmentMessageRepository recruitmentMessageRepository,
             ILogger logger,
             IMemoryCache cache)
@@ -28,17 +28,22 @@ namespace MeMetrics.Application.Queries.RecruitmentMessages
             _cache = cache;
         }
 
-        public async Task<QueryResult<RecruitmentMetrics>> Handle(GetRecruitmentMessageMetricsByPeriodSelectionQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResult<RecruitmentMessageMetrics>> Handle(GetRecruitmentMessageMetricsByPeriodSelectionQuery request, CancellationToken cancellationToken)
         {
 
             var dateRange = DatePeriodHelper.GetDateRangeFromPeriodSelection(request.DatePeriod);
             var cacheKey = $"recruitment-message-{dateRange.StartDate.ToString()}-{dateRange.EndDate.ToString()}";
 
+            if (request.RefreshCache)
+            {
+                _cache.Remove(cacheKey);
+            }
+
             var metrics = await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(23);
 
-                return await _recruitmentMessageRepository.GetRecruiterMetrics(dateRange.StartDate,
+                return await _recruitmentMessageRepository.GetOverviewRecruitmentMessageMetrics(dateRange.StartDate,
                     dateRange.EndDate,
                     dateRange.PreviousPeriodStartDate,
                     dateRange.PreviousPeriodEndDate);
@@ -47,7 +52,7 @@ namespace MeMetrics.Application.Queries.RecruitmentMessages
             metrics.CurrentPeriodLabel = dateRange.CurrentPeriodLabel;
             metrics.PriorPeriodLabel = dateRange.PriorPeriodLabel;
 
-            return new QueryResult<RecruitmentMetrics>(result: metrics, type: QueryResultTypeEnum.Success);
+            return new QueryResult<RecruitmentMessageMetrics>(result: metrics, type: QueryResultTypeEnum.Success);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace MeMetrics.Domain.Models.RecruitmentMessage
 {
-    public class RecruitmentMetrics
+    public class RecruitmentMessageMetrics
     {
         public int TotalMessages { get; set; }
         public int TotalIncomingMessages { get; set; }

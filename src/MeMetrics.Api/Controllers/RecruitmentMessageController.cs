@@ -50,7 +50,7 @@ namespace MeMetrics.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<RecruitmentMetrics>> GetRecruiterMetrics([FromQuery] PeriodSelectionEnum selectedPeriod)
+        public async Task<ActionResult<RecruitmentMessageMetrics>> GetRecruiterMetrics([FromQuery] PeriodSelectionEnum selectedPeriod)
         {
             var getMessageMetricsByPeriodSelectionQuery = new GetRecruitmentMessageMetricsByPeriodSelectionQuery()
             {

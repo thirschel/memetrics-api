@@ -33,6 +33,11 @@ namespace MeMetrics.Application.Queries.Rides
             var dateRange = DatePeriodHelper.GetDateRangeFromPeriodSelection(request.DatePeriod);
             var cacheKey = $"ride-{dateRange.StartDate.ToString()}-{dateRange.EndDate.ToString()}";
 
+            if (request.RefreshCache)
+            {
+                _cache.Remove(cacheKey);
+            }
+
             var metrics = await _cache.GetOrCreateAsync(cacheKey, async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(23);

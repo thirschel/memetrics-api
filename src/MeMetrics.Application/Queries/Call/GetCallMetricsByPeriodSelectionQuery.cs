@@ -8,5 +8,6 @@ namespace MeMetrics.Application.Queries.Call
     public class GetCallMetricsByPeriodSelectionQuery : IRequest<QueryResult<CallMetrics>>
     {
         public PeriodSelectionEnum DatePeriod { get; set; }
+        public bool RefreshCache { get; set; }
     }
 }

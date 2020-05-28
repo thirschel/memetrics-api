@@ -1,13 +1,12 @@
 using System.Threading;
-using MeMetrics.Application.Models;
+using MeMetrics.Application.Commands.Message;
 using MeMetrics.Application.Interfaces;
+using MeMetrics.Application.Models;
 using Moq;
 using Serilog;
 using Xunit;
-using MeMetrics.Application.Commands.Message;
-using MeMetrics.Domain.Models.Messages;
 
-namespace MeMetrics.Application.Tests.Commands.Example
+namespace MeMetrics.Application.Tests.Commands.Message
 {
     public class CreateMessageCommandHandlerTests
     {
@@ -26,7 +25,7 @@ namespace MeMetrics.Application.Tests.Commands.Example
            );
 
            // ACT
-           var response = await handler.Handle(new CreateMessageCommand(){ Message = new Message() }, new CancellationToken());
+           var response = await handler.Handle(new CreateMessageCommand(){ Message = new Domain.Models.Messages.Message() }, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.InvalidInput, response.Type);
@@ -46,14 +45,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            messageRepositoryMock.Setup(x => x.InsertMessage(It.IsAny<Message>())).ReturnsAsync(1);
+            messageRepositoryMock.Setup(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>())).ReturnsAsync(1);
 
             // ACT
-            var response = await handler.Handle(new CreateMessageCommand(){Message = new Message() { MessageId = "1" }}, new CancellationToken());
+            var response = await handler.Handle(new CreateMessageCommand(){Message = new Domain.Models.Messages.Message() { MessageId = "1" }}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            messageRepositoryMock.Verify(x => x.InsertMessage(It.IsAny<Message>()), Times.Once);
+            messageRepositoryMock.Verify(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>()), Times.Once);
         }
 
         [Fact]
@@ -70,14 +69,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            messageRepositoryMock.Setup(x => x.InsertMessage(It.IsAny<Message>())).ReturnsAsync(0);
+            messageRepositoryMock.Setup(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>())).ReturnsAsync(0);
 
             // ACT
-            var response = await handler.Handle(new CreateMessageCommand() { Message = new Message() { MessageId = "1" } }, new CancellationToken());
+            var response = await handler.Handle(new CreateMessageCommand() { Message = new Domain.Models.Messages.Message() { MessageId = "1" } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.UnprocessableEntity, response.Type);
-            messageRepositoryMock.Verify(x => x.InsertMessage(It.IsAny<Message>()), Times.Once);
+            messageRepositoryMock.Verify(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>()), Times.Once);
         }
     }
 }

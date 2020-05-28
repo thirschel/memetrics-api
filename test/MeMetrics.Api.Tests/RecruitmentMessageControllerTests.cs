@@ -64,7 +64,7 @@ namespace MeMetrics.Api.Tests
 
            mediatorMock
                .Setup(x => x.Send(It.IsAny<GetRecruitmentMessageMetricsByPeriodSelectionQuery>(), It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new QueryResult<RecruitmentMetrics>() { Type = QueryResultTypeEnum.Success });
+               .ReturnsAsync(new QueryResult<RecruitmentMessageMetrics>() { Type = QueryResultTypeEnum.Success });
            var controller = new RecruitmentMessageController(
                loggerMock.Object,
                mediatorMock.Object
@@ -85,7 +85,7 @@ namespace MeMetrics.Api.Tests
 
             mediatorMock
                 .Setup(x => x.Send(It.IsAny<GetRecruitmentMessageMetricsByPeriodSelectionQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new QueryResult<RecruitmentMetrics>() { Type = QueryResultTypeEnum.NotFound });
+                .ReturnsAsync(new QueryResult<RecruitmentMessageMetrics>() { Type = QueryResultTypeEnum.NotFound });
             var controller = new RecruitmentMessageController(
                 loggerMock.Object,
                 mediatorMock.Object

@@ -1,13 +1,12 @@
 using System.Threading;
-using MeMetrics.Application.Models;
+using MeMetrics.Application.Commands.Ride;
 using MeMetrics.Application.Interfaces;
+using MeMetrics.Application.Models;
 using Moq;
 using Serilog;
 using Xunit;
-using MeMetrics.Application.Commands.Ride;
-using MeMetrics.Domain.Models.Rides;
 
-namespace MeMetrics.Application.Tests.Commands.Example
+namespace MeMetrics.Application.Tests.Commands.Ride
 {
     public class CreateRideCommandHandlerTests
     {
@@ -26,7 +25,7 @@ namespace MeMetrics.Application.Tests.Commands.Example
            );
 
            // ACT
-           var response = await handler.Handle(new CreateRideCommand() { Ride = new Ride() }, new CancellationToken());
+           var response = await handler.Handle(new CreateRideCommand() { Ride = new Domain.Models.Rides.Ride() }, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.InvalidInput, response.Type);
@@ -46,14 +45,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            rideRepositoryMock.Setup(x => x.InsertRide(It.IsAny<Ride>())).ReturnsAsync(1);
+            rideRepositoryMock.Setup(x => x.InsertRide(It.IsAny<Domain.Models.Rides.Ride>())).ReturnsAsync(1);
 
             // ACT
-            var response = await handler.Handle(new CreateRideCommand(){Ride = new Ride() { RideId = "1" }}, new CancellationToken());
+            var response = await handler.Handle(new CreateRideCommand(){Ride = new Domain.Models.Rides.Ride() { RideId = "1" }}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            rideRepositoryMock.Verify(x => x.InsertRide(It.IsAny<Ride>()), Times.Once);
+            rideRepositoryMock.Verify(x => x.InsertRide(It.IsAny<Domain.Models.Rides.Ride>()), Times.Once);
         }
 
         [Fact]
@@ -70,14 +69,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            rideRepositoryMock.Setup(x => x.InsertRide(It.IsAny<Ride>())).ReturnsAsync(0);
+            rideRepositoryMock.Setup(x => x.InsertRide(It.IsAny<Domain.Models.Rides.Ride>())).ReturnsAsync(0);
 
             // ACT
-            var response = await handler.Handle(new CreateRideCommand() { Ride = new Ride() { RideId = "1" } }, new CancellationToken());
+            var response = await handler.Handle(new CreateRideCommand() { Ride = new Domain.Models.Rides.Ride() { RideId = "1" } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.UnprocessableEntity, response.Type);
-            rideRepositoryMock.Verify(x => x.InsertRide(It.IsAny<Ride>()), Times.Once);
+            rideRepositoryMock.Verify(x => x.InsertRide(It.IsAny<Domain.Models.Rides.Ride>()), Times.Once);
         }
     }
 }

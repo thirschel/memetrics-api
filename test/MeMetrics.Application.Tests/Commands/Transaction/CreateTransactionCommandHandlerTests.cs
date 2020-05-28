@@ -1,13 +1,12 @@
 using System.Threading;
-using MeMetrics.Application.Models;
+using MeMetrics.Application.Commands.Transaction;
 using MeMetrics.Application.Interfaces;
+using MeMetrics.Application.Models;
 using Moq;
 using Serilog;
 using Xunit;
-using MeMetrics.Application.Commands.Transaction;
-using MeMetrics.Domain.Models.Transactions;
 
-namespace MeMetrics.Application.Tests.Commands.Example
+namespace MeMetrics.Application.Tests.Commands.Transaction
 {
     public class CreateTransactionCommandHandlerTests
     {
@@ -26,7 +25,7 @@ namespace MeMetrics.Application.Tests.Commands.Example
            );
 
            // ACT
-           var response = await handler.Handle(new CreateTransactionCommand() { Transaction = new Transaction() }, new CancellationToken());
+           var response = await handler.Handle(new CreateTransactionCommand() { Transaction = new Domain.Models.Transactions.Transaction() }, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.InvalidInput, response.Type);
@@ -46,14 +45,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            transactionRepositoryMock.Setup(x => x.InsertTransaction(It.IsAny<Transaction>())).ReturnsAsync(1);
+            transactionRepositoryMock.Setup(x => x.InsertTransaction(It.IsAny<Domain.Models.Transactions.Transaction>())).ReturnsAsync(1);
 
             // ACT
-            var response = await handler.Handle(new CreateTransactionCommand(){Transaction = new Transaction() { TransactionId = "1" }}, new CancellationToken());
+            var response = await handler.Handle(new CreateTransactionCommand(){Transaction = new Domain.Models.Transactions.Transaction() { TransactionId = "1" }}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            transactionRepositoryMock.Verify(x => x.InsertTransaction(It.IsAny<Transaction>()), Times.Once);
+            transactionRepositoryMock.Verify(x => x.InsertTransaction(It.IsAny<Domain.Models.Transactions.Transaction>()), Times.Once);
         }
 
         [Fact]
@@ -70,14 +69,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            transactionRepositoryMock.Setup(x => x.InsertTransaction(It.IsAny<Transaction>())).ReturnsAsync(0);
+            transactionRepositoryMock.Setup(x => x.InsertTransaction(It.IsAny<Domain.Models.Transactions.Transaction>())).ReturnsAsync(0);
 
             // ACT
-            var response = await handler.Handle(new CreateTransactionCommand() { Transaction = new Transaction() { TransactionId = "1" } }, new CancellationToken());
+            var response = await handler.Handle(new CreateTransactionCommand() { Transaction = new Domain.Models.Transactions.Transaction() { TransactionId = "1" } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.UnprocessableEntity, response.Type);
-            transactionRepositoryMock.Verify(x => x.InsertTransaction(It.IsAny<Transaction>()), Times.Once);
+            transactionRepositoryMock.Verify(x => x.InsertTransaction(It.IsAny<Domain.Models.Transactions.Transaction>()), Times.Once);
         }
     }
 }

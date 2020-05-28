@@ -1,13 +1,12 @@
 using System.Threading;
-using MeMetrics.Application.Models;
+using MeMetrics.Application.Commands.RecruitmentMessage;
 using MeMetrics.Application.Interfaces;
+using MeMetrics.Application.Models;
 using Moq;
 using Serilog;
 using Xunit;
-using MeMetrics.Application.Commands.RecruitmentMessage;
-using MeMetrics.Domain.Models.RecruitmentMessage;
 
-namespace MeMetrics.Application.Tests.Commands.Example
+namespace MeMetrics.Application.Tests.Commands.RecruitmentMessage
 {
     public class CreateRecruitmentMessageCommandHandlerTests
     {
@@ -26,7 +25,7 @@ namespace MeMetrics.Application.Tests.Commands.Example
            );
 
            // ACT
-           var response = await handler.Handle(new CreateRecruitmentMessageCommand() { RecruitmentMessage = new RecruitmentMessage() }, new CancellationToken());
+           var response = await handler.Handle(new CreateRecruitmentMessageCommand() { RecruitmentMessage = new Domain.Models.RecruitmentMessage.RecruitmentMessage() }, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.InvalidInput, response.Type);
@@ -46,14 +45,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            recruitmentMessageRepositoryMock.Setup(x => x.InsertRecruitmentMessage(It.IsAny<RecruitmentMessage>())).ReturnsAsync(1);
+            recruitmentMessageRepositoryMock.Setup(x => x.InsertRecruitmentMessage(It.IsAny<Domain.Models.RecruitmentMessage.RecruitmentMessage>())).ReturnsAsync(1);
 
             // ACT
-            var response = await handler.Handle(new CreateRecruitmentMessageCommand(){RecruitmentMessage = new RecruitmentMessage() { RecruiterId = "1" }}, new CancellationToken());
+            var response = await handler.Handle(new CreateRecruitmentMessageCommand(){RecruitmentMessage = new Domain.Models.RecruitmentMessage.RecruitmentMessage() { RecruiterId = "1" }}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            recruitmentMessageRepositoryMock.Verify(x => x.InsertRecruitmentMessage(It.IsAny<RecruitmentMessage>()), Times.Once);
+            recruitmentMessageRepositoryMock.Verify(x => x.InsertRecruitmentMessage(It.IsAny<Domain.Models.RecruitmentMessage.RecruitmentMessage>()), Times.Once);
         }
 
         [Fact]
@@ -70,14 +69,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            recruitmentMessageRepositoryMock.Setup(x => x.InsertRecruitmentMessage(It.IsAny<RecruitmentMessage>())).ReturnsAsync(0);
+            recruitmentMessageRepositoryMock.Setup(x => x.InsertRecruitmentMessage(It.IsAny<Domain.Models.RecruitmentMessage.RecruitmentMessage>())).ReturnsAsync(0);
 
             // ACT
-            var response = await handler.Handle(new CreateRecruitmentMessageCommand() { RecruitmentMessage = new RecruitmentMessage() { RecruiterId = "1" } }, new CancellationToken());
+            var response = await handler.Handle(new CreateRecruitmentMessageCommand() { RecruitmentMessage = new Domain.Models.RecruitmentMessage.RecruitmentMessage() { RecruiterId = "1" } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.UnprocessableEntity, response.Type);
-            recruitmentMessageRepositoryMock.Verify(x => x.InsertRecruitmentMessage(It.IsAny<RecruitmentMessage>()), Times.Once);
+            recruitmentMessageRepositoryMock.Verify(x => x.InsertRecruitmentMessage(It.IsAny<Domain.Models.RecruitmentMessage.RecruitmentMessage>()), Times.Once);
         }
     }
 }

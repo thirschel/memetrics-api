@@ -34,10 +34,10 @@ namespace MeMetrics.Api.Controllers
             {
                 var tasks = new List<Task>()
                 {
-                    _mediator.Send(new GetCallMetricsByPeriodSelectionQuery() {DatePeriod = period}),
-                    _mediator.Send(new GetRideMetricsByPeriodSelectionQuery() {DatePeriod = period}),
-                    _mediator.Send(new GetMessageMetricsByPeriodSelectionQuery() {DatePeriod = period}),
-                    _mediator.Send(new GetRecruitmentMessageMetricsByPeriodSelectionQuery() {DatePeriod = period}),
+                    _mediator.Send(new GetCallMetricsByPeriodSelectionQuery() {DatePeriod = period, RefreshCache = true}),
+                    _mediator.Send(new GetRideMetricsByPeriodSelectionQuery() {DatePeriod = period, RefreshCache = true}),
+                    _mediator.Send(new GetMessageMetricsByPeriodSelectionQuery() {DatePeriod = period, RefreshCache = true}),
+                    _mediator.Send(new GetRecruitmentMessageMetricsByPeriodSelectionQuery() {DatePeriod = period, RefreshCache = true}),
                 };
                 await Task.WhenAll(tasks);
             }

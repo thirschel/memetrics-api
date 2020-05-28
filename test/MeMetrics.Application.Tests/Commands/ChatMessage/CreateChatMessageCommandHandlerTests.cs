@@ -1,15 +1,12 @@
 using System.Threading;
-using MeMetrics.Application.Models;
+using MeMetrics.Application.Commands.ChatMessage;
 using MeMetrics.Application.Interfaces;
+using MeMetrics.Application.Models;
 using Moq;
 using Serilog;
 using Xunit;
-using MeMetrics.Application.Commands.Call;
-using MeMetrics.Domain.Models.Calls;
-using MeMetrics.Application.Commands.ChatMessage;
-using MeMetrics.Domain.Models;
 
-namespace MeMetrics.Application.Tests.Commands.Example
+namespace MeMetrics.Application.Tests.Commands.ChatMessage
 {
     public class CreateChatMessageCommandHandlerTests
     {
@@ -28,7 +25,7 @@ namespace MeMetrics.Application.Tests.Commands.Example
            );
 
            // ACT
-           var response = await handler.Handle(new CreateChatMessageCommand(){ChatMessage = new ChatMessage()}, new CancellationToken());
+           var response = await handler.Handle(new CreateChatMessageCommand(){ChatMessage = new Domain.Models.ChatMessage()}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.InvalidInput, response.Type);
@@ -48,14 +45,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            chatMessageRepositoryMock.Setup(x => x.InsertChatMessage(It.IsAny<ChatMessage>())).ReturnsAsync(1);
+            chatMessageRepositoryMock.Setup(x => x.InsertChatMessage(It.IsAny<Domain.Models.ChatMessage>())).ReturnsAsync(1);
 
             // ACT
-            var response = await handler.Handle(new CreateChatMessageCommand(){ChatMessage = new ChatMessage() { ChatMessageId = "1" }}, new CancellationToken());
+            var response = await handler.Handle(new CreateChatMessageCommand(){ChatMessage = new Domain.Models.ChatMessage() { ChatMessageId = "1" }}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            chatMessageRepositoryMock.Verify(x => x.InsertChatMessage(It.IsAny<ChatMessage>()), Times.Once);
+            chatMessageRepositoryMock.Verify(x => x.InsertChatMessage(It.IsAny<Domain.Models.ChatMessage>()), Times.Once);
         }
 
         [Fact]
@@ -72,14 +69,14 @@ namespace MeMetrics.Application.Tests.Commands.Example
                 validator
             );
 
-            chatMessageRepositoryMock.Setup(x => x.InsertChatMessage(It.IsAny<ChatMessage>())).ReturnsAsync(0);
+            chatMessageRepositoryMock.Setup(x => x.InsertChatMessage(It.IsAny<Domain.Models.ChatMessage>())).ReturnsAsync(0);
 
             // ACT
-            var response = await handler.Handle(new CreateChatMessageCommand() { ChatMessage = new ChatMessage() { ChatMessageId = "1" } }, new CancellationToken());
+            var response = await handler.Handle(new CreateChatMessageCommand() { ChatMessage = new Domain.Models.ChatMessage() { ChatMessageId = "1" } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.UnprocessableEntity, response.Type);
-            chatMessageRepositoryMock.Verify(x => x.InsertChatMessage(It.IsAny<ChatMessage>()), Times.Once);
+            chatMessageRepositoryMock.Verify(x => x.InsertChatMessage(It.IsAny<Domain.Models.ChatMessage>()), Times.Once);
         }
     }
 }

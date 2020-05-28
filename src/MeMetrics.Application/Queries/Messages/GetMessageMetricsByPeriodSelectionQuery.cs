@@ -8,5 +8,6 @@ namespace MeMetrics.Application.Queries.Messages
     public class GetMessageMetricsByPeriodSelectionQuery : IRequest<QueryResult<MessageMetrics>>
     {
         public PeriodSelectionEnum DatePeriod { get; set; }
+        public bool RefreshCache { get; set; }
     }
 }

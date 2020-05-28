@@ -10,6 +10,6 @@ namespace MeMetrics.Application.Interfaces
         Task<List<RecruitmentMessage>> GetRecruitmentMessages();
         Task<int> InsertRecruitmentMessage(RecruitmentMessage recruitmentMessage);
 
-        Task<RecruitmentMetrics> GetRecruiterMetrics(DateTime? startDate, DateTime endDate, DateTime? previousPeriodStartDate, DateTime? previousPeriodEndDate);
+        Task<RecruitmentMessageMetrics> GetOverviewRecruitmentMessageMetrics(DateTime? startDate, DateTime endDate, DateTime? previousPeriodStartDate, DateTime? previousPeriodEndDate);
     }
 }

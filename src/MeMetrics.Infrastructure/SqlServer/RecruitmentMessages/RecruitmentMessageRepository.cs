@@ -62,7 +62,7 @@ namespace MeMetrics.Infrastructure.SqlServer.RecruitmentMessages
             return 1;
         }
 
-        public async Task<RecruitmentMetrics> GetRecruiterMetrics(
+        public async Task<RecruitmentMessageMetrics> GetOverviewRecruitmentMessageMetrics(
             DateTime? startDate, 
             DateTime endDate,
             DateTime? previousPeriodStartDate, 
@@ -103,7 +103,7 @@ namespace MeMetrics.Infrastructure.SqlServer.RecruitmentMessages
                     var messagePerformanceDtos = await multi.ReadAsync<PerformanceEntity>();
                     var messageWeekOverWeek = await multi.ReadAsync<WeekOverWeekEntity>();
 
-                    return new RecruitmentMetrics()
+                    return new RecruitmentMessageMetrics()
                     {
                         MessagesByDayOfWeek =_entityMapper.BuildByDayOfWeek<RecruitmentMessageByDayOfWeek>(messagesByDayOfWeekDtos.ToList()),
                         MessagePerformance =_entityMapper.BuildByPeriod(days.ToList(), messagePerformanceDtos.ToList(), previousPeriodEndDate),

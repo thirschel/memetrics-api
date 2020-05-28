@@ -8,5 +8,6 @@ namespace MeMetrics.Application.Queries.Rides
     public class GetRideMetricsByPeriodSelectionQuery : IRequest<QueryResult<RideMetrics>>
     {
         public PeriodSelectionEnum DatePeriod { get; set; }
+        public bool RefreshCache { get; set; }
     }
 }
