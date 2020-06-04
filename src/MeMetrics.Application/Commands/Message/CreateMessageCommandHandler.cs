@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MeMetrics.Application.Models;
@@ -13,14 +14,17 @@ namespace MeMetrics.Application.Commands.Message
     {
         private readonly IValidator<CreateMessageCommand> _validator;
         private readonly IMessageRepository _messageRepository;
+        private readonly IAttachmentRepository _attachmentRepository;
         private readonly ILogger _logger;
 
         public CreateMessageCommandHandler(
             IMessageRepository messageRepository,
+            IAttachmentRepository attachmentRepository,
             ILogger logger,
             IValidator<CreateMessageCommand> validator)
         {
             _messageRepository = messageRepository;
+            _attachmentRepository = attachmentRepository;
             _logger = logger;
             _validator = validator;
         }
@@ -35,6 +39,14 @@ namespace MeMetrics.Application.Commands.Message
                 return new CommandResult<bool>(result: false, type: CommandResultTypeEnum.InvalidInput);
             }
             var rowsAffected = await _messageRepository.InsertMessage(command.Message);
+
+            if (command.Message.Attachments != null)
+            {
+                for (var i = 0; i < command.Message.Attachments.Count; i++)
+                {
+                    await _attachmentRepository.InsertAttachment(command.Message.Attachments[i], command.Message.MessageId);
+                }
+            }
 
             if (rowsAffected == 0)
             {

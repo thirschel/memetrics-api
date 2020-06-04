@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Mail;
+using MeMetrics.Domain.Models.Attachments;
 
 namespace MeMetrics.Domain.Models.Messages
 {
@@ -13,8 +13,8 @@ namespace MeMetrics.Domain.Models.Messages
         public bool IsIncoming { get; set; }
         public string Text { get; set; }
         public bool IsMedia { get; set; }
-        public int TextLength { get; set; }
-        public int ThreadId { get; set; }
+        public int TextLength => Text.Length;
+        public string ThreadId { get; set; }
         public List<Attachment> Attachments { get; set; }
     }
 }

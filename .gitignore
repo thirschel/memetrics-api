@@ -1,16 +1,40 @@
-bin/
-obj/
-v15/
-*.csproj.user
-.vs
-log.txt
-/secrets
-/config
+*.swp
+*.*~
+project.lock.json
 .DS_Store
-00-local-deployment.yml
-.idea
+*.pyc
+nupkg/
+
+# Visual Studio Code
 .vscode
-NuGet.Config
-src/TestResults
-*.DotSettings.user
-**/TestResults
+
+# Rider
+.idea
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio 2015
+.vs/
+
+# Config Files
+src/MeMetrics.Api/appsettings.json
