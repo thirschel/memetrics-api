@@ -20,12 +20,14 @@ namespace MeMetrics.Infrastructure.Helpers
 
         public int GetTotalMessagesByGender(List<MessageByGenderEntity> entities, string gender)
         {
-            return entities.Where(e => e.Gender == gender).Sum(e => e.Total);
+            var genderEntities = entities.Where(e => e.Gender == gender).ToList();
+            return genderEntities.Any() ? entities.Where(e => e.Gender == gender).Sum(e => e.Total) : 0;
         }
 
         public int GetAverageTextLengthByGender(List<MessageByGenderEntity> entities, string gender)
         {
-            return (int) entities.Where(e => e.Gender == gender && !e.IsIncoming).Average(e => e.AverageTextLength);
+            var genderEntities = entities.Where(e => e.Gender == gender && !e.IsIncoming).ToList();
+            return genderEntities.Any() ? (int) genderEntities.Average(e => e.AverageTextLength) : 0;
         }
 
         public List<T> BuildByDayOfWeek<T>(List<PerDayOfWeekEntity> entities)

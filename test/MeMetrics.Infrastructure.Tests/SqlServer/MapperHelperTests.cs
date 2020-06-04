@@ -10,6 +10,7 @@ using MeMetrics.Domain.Models.RecruitmentMessage;
 using MeMetrics.Domain.Models.Rides;
 using MeMetrics.Infrastructure.Helpers;
 using MeMetrics.Infrastructure.SqlServer.Entities;
+using MeMetrics.Infrastructure.SqlServer.Messages;
 using Xunit;
 
 namespace MeMetrics.Infrastructure.Tests.SqlServer
@@ -18,7 +19,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
     {
 
         [Fact]
-        public void BuildByDayOfWeek_Should_Add_Missing_Days_In_Order()
+        public void BuildByDayOfWeek_ShouldAddMissingDaysInOrder()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerDayOfWeekProfile>(); });
             var mapper = new Mapper(configuration);
@@ -51,7 +52,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByDayOfWeek_Can_Map_To_Call()
+        public void BuildByDayOfWeek_ShouldMapToCall()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerDayOfWeekProfile>(); });
             var mapper = new Mapper(configuration);
@@ -88,7 +89,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByDayOfWeek_Can_Map_To_Message()
+        public void BuildByDayOfWeek_ShouldMapToMessage()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerDayOfWeekProfile>(); });
             var mapper = new Mapper(configuration);
@@ -125,7 +126,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByDayOfWeek_Can_Map_To_Ride()
+        public void BuildByDayOfWeek_ShouldMapToRide()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerDayOfWeekProfile>(); });
             var mapper = new Mapper(configuration);
@@ -152,7 +153,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByDayOfWeek_Can_Map_To_RecruitmentMessage()
+        public void BuildByDayOfWeek_ShouldMapToRecruitmentMessage()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerDayOfWeekProfile>(); });
             var mapper = new Mapper(configuration);
@@ -189,7 +190,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByHour_Should_Add_Missing_Days_In_Order()
+        public void BuildByHour_ShouldAddMissingDaysInOrder()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerHourProfile>(); });
             var mapper = new Mapper(configuration);
@@ -223,7 +224,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByHour_Should_Map_To_Call()
+        public void BuildByHour_ShouldMapToCall()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerHourProfile>(); });
             var mapper = new Mapper(configuration);
@@ -262,7 +263,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByHour_Should_Map_To_Message()
+        public void BuildByHour_ShouldMapToMessage()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerHourProfile>(); });
             var mapper = new Mapper(configuration);
@@ -301,7 +302,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByHour_Should_Map_To_Ride()
+        public void BuildByHour_ShouldMapToRide()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerHourProfile>(); });
             var mapper = new Mapper(configuration);
@@ -340,7 +341,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByHour_Should_Map_To_RecruitmentMessage()
+        public void BuildByHour_ShouldMapToRecruitmentMessage()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerHourProfile>(); });
             var mapper = new Mapper(configuration);
@@ -379,7 +380,7 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
         }
 
         [Fact]
-        public void BuildByPeriod_Should_Map_Correctly()
+        public void BuildByPeriod_ShouldMapCorrectly()
         {
             var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerPeriodProfile>(); });
             var mapper = new Mapper(configuration);
@@ -406,6 +407,34 @@ namespace MeMetrics.Infrastructure.Tests.SqlServer
             Assert.Equal(5, byPeriod.Count(c => !c.IsPreviousPeriod));
             Assert.Equal(entities[0].Count, byPeriod[0].Count);
             Assert.Equal(1, byPeriod[0].DayNumber);
+        }
+
+        [Fact]
+        public void GetTotalMessagesByGender_ShouldReturnZero_WhenNoEntitiesToCount()
+        {
+            var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerPeriodProfile>(); });
+            var mapper = new Mapper(configuration);
+            var mapperHelper = new EntityMapper(mapper);
+
+            var entities = new List<MessageByGenderEntity>();
+
+            var total = mapperHelper.GetTotalMessagesByGender(entities, "M");
+
+            Assert.Equal(0, total);
+        }
+
+        [Fact]
+        public void GetAverageTextLengthByGender_ShouldReturnZero_WhenNoEntitiesToAverage()
+        {
+            var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<PerPeriodProfile>(); });
+            var mapper = new Mapper(configuration);
+            var mapperHelper = new EntityMapper(mapper);
+
+            var entities = new List<MessageByGenderEntity>();
+
+            var total = mapperHelper.GetAverageTextLengthByGender(entities, "M");
+
+            Assert.Equal(0, total);
         }
     }
 }
