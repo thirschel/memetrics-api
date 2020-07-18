@@ -121,8 +121,8 @@ namespace MeMetrics.Infrastructure.SqlServer.Calls
                         TotalKnownMaleDurationSeconds = totalKnownMaleDuration,
                         TotalKnownDurationSeconds = totalKnownMaleDuration + totalKnownFemaleDuration,
                         TotalDurationSeconds = totalDuration,
-                        TotalCallsIncoming = callsInVsOutDto.First(d => d.IsIncoming).Total,
-                        TotalCallsOutgoing = callsInVsOutDto.First(d => !d.IsIncoming).Total,
+                        TotalCallsIncoming = callsInVsOutDto.FirstOrDefault(d => d.IsIncoming)?.Total ?? 0,
+                        TotalCallsOutgoing = callsInVsOutDto.FirstOrDefault(d => !d.IsIncoming)?.Total ?? 0,
 
                     };
                 }
