@@ -9,7 +9,7 @@ trigger:
 stages:
 - stage: Build
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-latest'
 
   variables:
     - group: Infrastructure
@@ -32,21 +32,21 @@ stages:
       displayName: 'dotnet install'
       inputs:
         packageType: 'sdk'
-        version: 3.1.201
+        version: 6.0.100
 
     # DotNetCoreCLI@2 makes it easy to specify a VSTS feed and handles the authentication.
     - task: DotNetCoreCLI@2
       displayName: 'dotnet restore'
       inputs:
         command: restore
-        version: 3.1.201
+        version: 6.0.100
 
     - task: DotNetCoreCLI@2
       displayName: dotnet build
       inputs:
         projects: 'src/$(project_name).Api/*.csproj'
         arguments: '--configuration $(build_configuration)'
-        version: 3.1.201
+        version: 6.0.100
 
     # Test
     # Removing coverage percentages until Azure DevOps supports differential coverage checks on pull requests for Cobertura
@@ -94,7 +94,7 @@ stages:
         PathtoPublish: '$(build.artifactstagingdirectory)'
 - stage: Deploy
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-latest'
   variables:
     - group: Infrastructure
     - name: environment
@@ -119,7 +119,7 @@ stages:
     - deployment: deploy
       displayName: Deploy
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       # creates an environment if it doesn't exist
       environment: 'dev'
       strategy:
