@@ -11,6 +11,9 @@ using CorrelationId;
 using MeMetrics.Api.Middleware.ExceptionHandling;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using MeMetrics.Infrastructure;
+using System.Collections.Generic;
+using MeMetrics.Domain.Models.Calls;
+using Newtonsoft.Json;
 
 namespace MeMetrics.Api
 {
@@ -51,6 +54,15 @@ namespace MeMetrics.Api
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddCors();
+            var calls = new List<Call>()
+            {
+                new Call()
+                {
+                    CallId="1"
+                }
+            };
+            var test = JsonConvert.SerializeObject(calls);
+     
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
