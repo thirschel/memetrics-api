@@ -15,6 +15,7 @@ namespace MeMetrics.Api
             WebHost.CreateDefaultBuilder(args)
                 .UseUrls("http://*:5000")
                 .UseStartup<Startup>()
+                .UseKestrel(options => { options.Limits.MaxRequestBodySize = null; })
                 .UseLamar();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -107,22 +108,38 @@ namespace MeMetrics.Infrastructure.SqlServer.Messages
 
         }
 
-        public async Task<int> InsertMessage(Message message)
+        public async Task<int> InsertMessages(IList<Message> messages)
         {
+            var tvp = new DataTable();
+
+            tvp.Columns.Add(nameof(Message.MessageId), typeof(string));
+            tvp.Columns.Add(nameof(Message.PhoneNumber), typeof(string));
+            tvp.Columns.Add(nameof(Message.Name), typeof(string));
+            tvp.Columns.Add(nameof(Message.OccurredDate), typeof(DateTimeOffset));
+            tvp.Columns.Add(nameof(Message.IsIncoming), typeof(bool));
+            tvp.Columns.Add(nameof(Message.Text), typeof(string));
+            tvp.Columns.Add(nameof(Message.IsMedia), typeof(bool));
+            tvp.Columns.Add(nameof(Message.TextLength), typeof(int));
+            tvp.Columns.Add(nameof(Message.ThreadId), typeof(string));
+
+            foreach (var message in messages)
+            {
+                var row = tvp.NewRow();
+                row[nameof(message.MessageId)] = message.MessageId;
+                row[nameof(message.PhoneNumber)] = message.PhoneNumber;
+                row[nameof(message.Name)] = message.Name;
+                row[nameof(message.OccurredDate)] = message.OccurredDate;
+                row[nameof(message.IsIncoming)] = message.IsIncoming;
+                row[nameof(message.Text)] = message.Text;
+                row[nameof(message.IsMedia)] = message.IsMedia;
+                row[nameof(message.TextLength)] = message.TextLength;
+                row[nameof(message.ThreadId)] = message.ThreadId;
+
+                tvp.Rows.Add(row);
+            }
             using (var connection = SqlConnectionBuilder.Build(_configuration.Value.DB_CONNECTION_STRING))
             {
-                await connection.ExecuteAsync(MergeMessage.Value, new
-                {
-                    message.MessageId,
-                    message.PhoneNumber,
-                    message.Name,
-                    message.OccurredDate,
-                    message.IsIncoming,
-                    message.IsMedia,
-                    message.Text,
-                    message.TextLength,
-                    message.ThreadId
-                });
+                await connection.ExecuteAsync(MergeMessage.Value, new {tvp = tvp.AsTableValuedParameter("dbo.MessageType") });
             }
 
             return 1;

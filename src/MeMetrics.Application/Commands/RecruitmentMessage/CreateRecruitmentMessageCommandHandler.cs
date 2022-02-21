@@ -30,7 +30,7 @@ namespace MeMetrics.Application.Commands.RecruitmentMessage
 
             if (!validation.IsValid)
             {
-                _logger.Error("Create Recruitment Message Command produced errors on validation {Errors}", validation.ToString());
+                _logger.Error("Create Recruitment Messages Command produced errors on validation {Errors}", validation.ToString());
                 return new CommandResult<bool>(result: false, type: CommandResultTypeEnum.InvalidInput);
             }
             var rowsAffected = await _recruitmentMessageRepository.InsertRecruitmentMessage(command.RecruitmentMessage);

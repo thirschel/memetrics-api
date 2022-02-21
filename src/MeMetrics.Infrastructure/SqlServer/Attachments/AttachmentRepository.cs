@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Dapper;
 using MeMetrics.Domain.Models.Attachments;
 using MeMetrics.Infrastructure.Helpers;
@@ -17,18 +18,15 @@ namespace MeMetrics.Infrastructure.SqlServer.Attachments
             _configuration = configuration;
         }
 
-        public async Task InsertAttachment(Attachment attachment, string messageId)
+        public async Task InsertAttachments(IList<Attachment> attachments)
         {
             using (var connection = SqlConnectionBuilder.Build(_configuration.Value.DB_CONNECTION_STRING))
             {
                 var sql = $@"{MergeAttachment.Value}";
-                await connection.ExecuteAsync(sql, new
+                for (var i = 0; i < attachments.Count; i++)
                 {
-                    attachment.AttachmentId,
-                    MessageId = messageId,
-                    attachment.Base64Data,
-                    attachment.FileName,
-                });
+                    await connection.ExecuteAsync(sql, attachments[i]);
+                }
             }
         }
     }

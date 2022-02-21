@@ -3,18 +3,9 @@ namespace MeMetrics.Infrastructure.SqlServer.Messages.Sql
     public class MergeMessage
     {
         public const string Value = @"
+                     
                         MERGE INTO [dbo].[Message] AS TARGET
-                        USING (SELECT
-                             @MessageId AS MessageId
-                            ,@PhoneNumber AS PhoneNumber
-                            ,@Name AS Name
-                            ,@OccurredDate AS OccurredDate
-                            ,@IsIncoming AS IsIncoming
-                            ,@IsMedia AS IsMedia
-                            ,@Text AS Text
-                            ,@TextLength AS TextLength
-                            ,@ThreadId AS ThreadId)
-                        AS SOURCE 
+                        USING @tvp AS SOURCE 
                         ON TARGET.MessageId = SOURCE.MessageId 
                         WHEN MATCHED THEN
 						UPDATE SET 

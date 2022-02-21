@@ -22,7 +22,7 @@ namespace MeMetrics.Api.Tests
            var loggerMock = new Mock<ILogger>();
 
            mediatorMock
-               .Setup(x => x.Send(It.IsAny<CreateMessageCommand>(), It.IsAny<CancellationToken>()))
+               .Setup(x => x.Send(It.IsAny<CreateMessagesCommand>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(new CommandResult<bool>(){ Type = CommandResultTypeEnum.Success });
            var controller = new MessageController(
                loggerMock.Object,
@@ -32,7 +32,7 @@ namespace MeMetrics.Api.Tests
            var response = await controller.SaveMessage(new Message());
 
            Assert.IsType<OkObjectResult>(response.Result);
-           mediatorMock.Verify(x => x.Send(It.IsAny<CreateMessageCommand>(), It.IsAny<CancellationToken>()), Times.Once());
+           mediatorMock.Verify(x => x.Send(It.IsAny<CreateMessagesCommand>(), It.IsAny<CancellationToken>()), Times.Once());
 
         }
 
@@ -43,7 +43,7 @@ namespace MeMetrics.Api.Tests
             var loggerMock = new Mock<ILogger>();
 
             mediatorMock
-                .Setup(x => x.Send(It.IsAny<CreateMessageCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.Send(It.IsAny<CreateMessagesCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CommandResult<bool>() { Type = CommandResultTypeEnum.InvalidInput });
             var controller = new MessageController(
                 loggerMock.Object,

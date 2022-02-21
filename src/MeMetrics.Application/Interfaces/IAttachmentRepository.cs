@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MeMetrics.Domain.Models.Attachments;
 
 namespace MeMetrics.Application.Interfaces
 {
     public interface IAttachmentRepository
     {
-        Task InsertAttachment(Attachment attachment, string messageId1);
+        Task InsertAttachments(IList<Attachment> attachments);
     }
 }

@@ -29,7 +29,7 @@ namespace MeMetrics.Application.Tests.Commands.Message
            );
 
            // ACT
-           var response = await handler.Handle(new CreateMessageCommand(){ Message = new Domain.Models.Messages.Message() }, new CancellationToken());
+           var response = await handler.Handle(new CreateMessagesCommand(){ Messages = new List<Domain.Models.Messages.Message>() { new Domain.Models.Messages.Message() } }, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.InvalidInput, response.Type);
@@ -51,15 +51,15 @@ namespace MeMetrics.Application.Tests.Commands.Message
                 validator
             );
 
-            messageRepositoryMock.Setup(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>())).ReturnsAsync(1);
+            messageRepositoryMock.Setup(x => x.InsertMessages(It.IsAny<IList<Domain.Models.Messages.Message>>())).ReturnsAsync(1);
 
             // ACT
-            var response = await handler.Handle(new CreateMessageCommand(){Message = new Domain.Models.Messages.Message() { MessageId = "1" }}, new CancellationToken());
+            var response = await handler.Handle(new CreateMessagesCommand(){Messages = new List<Domain.Models.Messages.Message>() { new() { MessageId = "1" } } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            messageRepositoryMock.Verify(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>()), Times.Once);
-            attachmentRepositoryMock.Verify(x => x.InsertAttachment(It.IsAny<Attachment>(), It.IsAny<string>()), Times.Never);
+            messageRepositoryMock.Verify(x => x.InsertMessages(It.IsAny<IList<Domain.Models.Messages.Message>>()), Times.Once);
+            attachmentRepositoryMock.Verify(x => x.InsertAttachments(It.IsAny<IList<Attachment>>()), Times.Never);
         }
 
         [Fact]
@@ -77,27 +77,30 @@ namespace MeMetrics.Application.Tests.Commands.Message
                 loggerMock.Object,
                 validator
             );
-            var command = new CreateMessageCommand()
+            var command = new CreateMessagesCommand()
             {
-                Message = new Domain.Models.Messages.Message()
+                Messages = new List<Domain.Models.Messages.Message>()
                 {
-                    MessageId = "1",
-                    Attachments = new List<Attachment>()
+                    new Domain.Models.Messages.Message()
                     {
-                        new Attachment(),
-                        new Attachment(),
+                        MessageId = "1",
+                        Attachments = new List<Attachment>()
+                        {
+                            new Attachment(),
+                            new Attachment(),
+                        }
                     }
                 }
             };
-            messageRepositoryMock.Setup(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>())).ReturnsAsync(1);
+            messageRepositoryMock.Setup(x => x.InsertMessages(It.IsAny<IList<Domain.Models.Messages.Message>>())).ReturnsAsync(1);
 
             // ACT
             var response = await handler.Handle(command, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            messageRepositoryMock.Verify(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>()), Times.Once);
-            attachmentRepositoryMock.Verify(x => x.InsertAttachment(It.IsAny<Attachment>(), command.Message.MessageId), Times.Exactly(2));
+            messageRepositoryMock.Verify(x => x.InsertMessages(It.IsAny<IList<Domain.Models.Messages.Message>>()), Times.Once);
+            attachmentRepositoryMock.Verify(x => x.InsertAttachments(It.IsAny<IList<Attachment>>()), Times.Once);
         }
 
         [Fact]
@@ -116,14 +119,14 @@ namespace MeMetrics.Application.Tests.Commands.Message
                 validator
             );
 
-            messageRepositoryMock.Setup(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>())).ReturnsAsync(0);
+            messageRepositoryMock.Setup(x => x.InsertMessages(It.IsAny<IList<Domain.Models.Messages.Message>>())).ReturnsAsync(0);
 
             // ACT
-            var response = await handler.Handle(new CreateMessageCommand() { Message = new Domain.Models.Messages.Message() { MessageId = "1" } }, new CancellationToken());
+            var response = await handler.Handle(new CreateMessagesCommand() { Messages = new List<Domain.Models.Messages.Message>() { new Domain.Models.Messages.Message() { MessageId = "1" } } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.UnprocessableEntity, response.Type);
-            messageRepositoryMock.Verify(x => x.InsertMessage(It.IsAny<Domain.Models.Messages.Message>()), Times.Once);
+            messageRepositoryMock.Verify(x => x.InsertMessages(It.IsAny< IList<Domain.Models.Messages.Message>>()), Times.Once);
         }
     }
 }

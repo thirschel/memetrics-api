@@ -30,9 +30,32 @@ namespace MeMetrics.Api.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<bool>> SaveMessage([FromBody] Message message)
         {
-            var createMessageCommand = new CreateMessageCommand()
+            var createMessageCommand = new CreateMessagesCommand()
             {
-                Message = message,
+                Messages = new List<Message>() { message },
+            };
+            var result = await _mediator.Send(createMessageCommand);
+
+            if (result.Type == CommandResultTypeEnum.InvalidInput)
+            {
+                return new BadRequestResult();
+            }
+
+            return new OkObjectResult(result.Result);
+        }
+
+        [Route("")]
+        [Authorize]
+        [HttpPost]
+        [ApiVersion("2")]
+        [ApiExplorerSettings(GroupName = "v2")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<bool>> SaveMessages([FromBody] IList<Message> messages)
+        {
+            var createMessageCommand = new CreateMessagesCommand()
+            {
+                Messages = messages,
             };
             var result = await _mediator.Send(createMessageCommand);
 
