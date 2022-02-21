@@ -54,6 +54,15 @@ namespace MeMetrics.Api
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddCors();
+            var calls = new List<Call>()
+            {
+                new Call()
+                {
+                    CallId="1"
+                }
+            };
+            var test = JsonConvert.SerializeObject(calls);
+     
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
