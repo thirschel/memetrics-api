@@ -23,6 +23,12 @@ locals {
     DOCKER_REGISTRY_SERVER_PASSWORD                             = var.docker_registry_server_password
     ASPNETCORE_ENVIRONMENT                                      = var.aspnetcore_environment
     ALLOWED_ORIGIN                                              = var.allowed_origin
+
+    BLOB_STORAGE_CONNECTION_STRING                              = var.blob_storage_connection_string
+    GOOGLE_CLIENT_ID                                            = var.google_client_id
+    GOOGLE_CLIENT_SECRET                                        = var.google_client_secret
+    GOOGLE_PHOTO_REFRESH_TOKEN                                  = var.google_photo_refresh_token
+    GOOGLE_ALBUM_ID                                             = var.google_album_id
   }
 }
 

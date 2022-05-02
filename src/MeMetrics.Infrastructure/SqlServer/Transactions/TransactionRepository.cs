@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Dapper;
 using MeMetrics.Application.Interfaces;
+using MeMetrics.Application.Models;
 using MeMetrics.Domain.Models.Transactions;
 using MeMetrics.Infrastructure.Helpers;
 using MeMetrics.Infrastructure.SqlServer.Transactions.Sql;

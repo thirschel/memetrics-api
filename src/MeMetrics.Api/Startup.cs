@@ -12,6 +12,8 @@ using MeMetrics.Api.Middleware.ExceptionHandling;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using MeMetrics.Infrastructure;
 using System.Collections.Generic;
+using System.Linq;
+using MeMetrics.Application.Models;
 using MeMetrics.Domain.Models.Calls;
 using Newtonsoft.Json;
 
@@ -61,7 +63,8 @@ namespace MeMetrics.Api
         {
             var environmentConfiguration = new EnvironmentConfiguration();
             Configuration.Bind(environmentConfiguration);
-            app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().WithOrigins(new[] {environmentConfiguration.ALLOWED_ORIGIN}));
+            var allowedOrigins = environmentConfiguration.ALLOWED_ORIGIN.Split(" ").ToArray();
+            app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().WithOrigins(allowedOrigins));
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseSwaggerDocumentation(provider);
             app.UseRouting();

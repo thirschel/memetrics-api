@@ -30,3 +30,9 @@ variable "db_connection_string" {}
 variable "primary_api_key" {}
 variable "secondary_api_key" {}
 variable "allowed_origin" {}
+
+variable "blob_storage_connection_string" {}
+variable "google_client_id" {}
+variable "google_client_secret" {}
+variable "google_photo_refresh_token" {}
+variable "google_album_id" {}

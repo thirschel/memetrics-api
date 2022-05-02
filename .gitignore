@@ -38,3 +38,4 @@ msbuild.wrn
 
 # Config Files
 src/MeMetrics.Api/appsettings.json
+src/MeMetrics.Api/Properties/launchSettings.json

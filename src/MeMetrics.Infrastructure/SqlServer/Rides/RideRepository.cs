@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Dapper;
 using MeMetrics.Application.Interfaces;
+using MeMetrics.Application.Models;
 using MeMetrics.Domain.Models;
 using MeMetrics.Domain.Models.Rides;
 using MeMetrics.Infrastructure.Helpers;

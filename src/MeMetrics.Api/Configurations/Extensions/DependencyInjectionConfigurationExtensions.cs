@@ -3,6 +3,7 @@ using MeMetrics.Infrastructure;
 using Lamar;
 using MediatR;
 using FluentValidation;
+using MeMetrics.Application.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,5 +1,6 @@
 using System;
 using MeMetrics.Api.Middleware.Authentication;
+using MeMetrics.Application.Models;
 using MeMetrics.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
+using MeMetrics.Application.Models;
 using MeMetrics.Domain.Models.Attachments;
 using MeMetrics.Infrastructure.Helpers;
 using MeMetrics.Infrastructure.SqlServer.Attachments.Sql;

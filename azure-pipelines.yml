@@ -114,7 +114,7 @@ stages:
     - name: key_vault_name
       value: mm$(environment)-keyvault
     - name: allowed_origin
-      value: 'https://www.memetrics.net'
+      value: 'https://www.memetrics.net https://www.laurenandtyler.net'
   jobs:
     - deployment: deploy
       displayName: Deploy
@@ -211,6 +211,11 @@ stages:
                 TF_VAR_docker_registry_server_url: $(DockerRegistryServerName)
                 TF_VAR_docker_registry_server_username: $(DockerRegistryUsername)
                 TF_VAR_docker_registry_server_password: $(DockerRegistryPassword)
+                TF_VAR_google_client_id: $(GmailClientId)
+                TF_VAR_google_client_secret: $(GmailClientSecret)
+                TF_VAR_google_photo_refresh_token: $(GooglePhotoRefreshToken)
+                TF_VAR_google_album_id: $(GoogleAlbumId)
+                TF_VAR_blob_storage_connection_string: $(BlobStorageConnectionString)
                 TF_VAR_aspnetcore_environment: 'Development'
                 TF_WORKSPACE: $(environment)
                 

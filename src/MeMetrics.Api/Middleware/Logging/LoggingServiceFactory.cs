@@ -1,6 +1,7 @@
 ﻿using System;
 using MeMetrics.Infrastructure;
 using CorrelationId;
+using MeMetrics.Application.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
