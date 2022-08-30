@@ -4,6 +4,10 @@
   <a href="https://memetrics.net/">Visit MeMetrics</a>
 </h3>
 
+<div align="center">
+ <img src="https://dev.azure.com/tylerhirschel/MeMetrics/_apis/build/status/MeMetrics%20Api?branchName=develop"/>
+</div>
+
 <h3 align="center">
   <a href="https://github.com/thirschel/memetrics-ui/blob/master/ARCHITECTURE.md">Architecture Diagram</a> |
   <a href="https://github.com/thirschel/memetrics-ui">UI</a> | 
