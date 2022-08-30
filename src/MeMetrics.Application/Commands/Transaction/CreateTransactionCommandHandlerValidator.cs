@@ -7,6 +7,15 @@ namespace MeMetrics.Application.Commands.Transaction
         public CreateTransactionCommandValidator()
         {
             RuleFor(x => x.Transactions).NotNull();
+            RuleForEach(x => x.Transactions).SetValidator(new TransactionValidator());
+        }
+    }
+
+    public class TransactionValidator : AbstractValidator<Domain.Models.Transactions.Transaction>
+    {
+        public TransactionValidator()
+        {
+            RuleFor(x => x.TransactionId).NotNull().NotEmpty();
         }
     }
 }
