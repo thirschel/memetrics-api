@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using MeMetrics.Application.Commands.Call;
 using MeMetrics.Application.Interfaces;
@@ -45,14 +46,14 @@ namespace MeMetrics.Application.Tests.Commands.Call
                 validator
             );
 
-            callRepositoryMock.Setup(x => x.InsertCall(It.IsAny<Domain.Models.Calls.Call>())).ReturnsAsync(1);
+            callRepositoryMock.Setup(x => x.InsertCalls(It.IsAny<List<Domain.Models.Calls.Call>>())).ReturnsAsync(1);
 
             // ACT
-            var response = await handler.Handle(new CreateCallCommand(){Call = new Domain.Models.Calls.Call() { CallId = "1" }}, new CancellationToken());
+            var response = await handler.Handle(new CreateCallCommand(){Calls = new List<Domain.Models.Calls.Call>() { new Domain.Models.Calls.Call() {CallId = "1" }}}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            callRepositoryMock.Verify(x => x.InsertCall(It.IsAny<Domain.Models.Calls.Call>()), Times.Once);
+            callRepositoryMock.Verify(x => x.InsertCalls(It.IsAny<List<Domain.Models.Calls.Call>>()), Times.Once);
         }
 
         [Fact]
@@ -69,14 +70,14 @@ namespace MeMetrics.Application.Tests.Commands.Call
                 validator
             );
 
-            callRepositoryMock.Setup(x => x.InsertCall(It.IsAny<Domain.Models.Calls.Call>())).ReturnsAsync(0);
+            callRepositoryMock.Setup(x => x.InsertCalls(It.IsAny<List<Domain.Models.Calls.Call>>())).ReturnsAsync(0);
 
             // ACT
-            var response = await handler.Handle(new CreateCallCommand() { Call = new Domain.Models.Calls.Call() { CallId = "1" } }, new CancellationToken());
+            var response = await handler.Handle(new CreateCallCommand() { Calls = new List<Domain.Models.Calls.Call>() { new Domain.Models.Calls.Call() { CallId = "1" } } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.UnprocessableEntity, response.Type);
-            callRepositoryMock.Verify(x => x.InsertCall(It.IsAny<Domain.Models.Calls.Call>()), Times.Once);
+            callRepositoryMock.Verify(x => x.InsertCalls(It.IsAny<List<Domain.Models.Calls.Call>>()), Times.Once);
         }
     }
 }

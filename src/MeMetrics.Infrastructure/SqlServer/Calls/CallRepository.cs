@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -42,20 +43,32 @@ namespace MeMetrics.Infrastructure.SqlServer.Calls
             }
         }
 
-        public async Task<int> InsertCall(Call call)
+        public async Task<int> InsertCalls(List<Call> calls)
         {
+            var tvp = new DataTable();
+
+            tvp.Columns.Add(nameof(Call.CallId), typeof(string));
+            tvp.Columns.Add(nameof(Call.PhoneNumber), typeof(string));
+            tvp.Columns.Add(nameof(Call.Name), typeof(string));
+            tvp.Columns.Add(nameof(Call.OccurredDate), typeof(DateTimeOffset));
+            tvp.Columns.Add(nameof(Call.IsIncoming), typeof(bool));
+            tvp.Columns.Add(nameof(Call.Duration), typeof(int));
+
+            foreach (var call in calls)
+            {
+                var row = tvp.NewRow();
+                row[nameof(call.CallId)] = call.CallId;
+                row[nameof(call.PhoneNumber)] = call.PhoneNumber;
+                row[nameof(call.Name)] = call.Name;
+                row[nameof(call.OccurredDate)] = call.OccurredDate;
+                row[nameof(call.IsIncoming)] = call.IsIncoming;
+                row[nameof(call.Duration)] = call.Duration;
+
+                tvp.Rows.Add(row);
+            }
             using (var connection = SqlConnectionBuilder.Build(_configuration.Value.DB_CONNECTION_STRING))
             {
-                var sql = $@"{MergeCall.Value}";
-                await connection.ExecuteAsync(sql, new
-                {
-                    call.CallId,
-                    call.PhoneNumber,
-                    call.Name,
-                    call.OccurredDate,
-                    call.IsIncoming,
-                    call.Duration
-                });
+                await connection.ExecuteAsync(MergeCall.Value, new {tvp = tvp.AsTableValuedParameter("dbo.CallType") });
             }
 
             return 1;

@@ -32,9 +32,32 @@ namespace MeMetrics.Api.Controllers
         {
             var createCallCommand = new CreateCallCommand()
             {
-                Call = call,
+                Calls = new List<Call>() { call },
             };
             var result = await _mediator.Send(createCallCommand);
+
+            if (result.Type == CommandResultTypeEnum.InvalidInput)
+            {
+                return new BadRequestResult();
+            }
+
+            return new OkObjectResult(result.Result);
+        }
+
+        [Route("")]
+        [Authorize]
+        [HttpPost]
+        [ApiVersion("2")]
+        [ApiExplorerSettings(GroupName = "v2")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<bool>> SaveCalls([FromBody] List<Call> calls)
+        {
+            var createMessageCommand = new CreateCallCommand()
+            {
+                Calls = calls,
+            };
+            var result = await _mediator.Send(createMessageCommand);
 
             if (result.Type == CommandResultTypeEnum.InvalidInput)
             {

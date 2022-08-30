@@ -6,7 +6,7 @@ namespace MeMetrics.Application.Commands.RecruitmentMessage
     {
         public CreateRecruitmentMessageCommandValidator()
         {
-            RuleFor(x => x.RecruitmentMessage.RecruiterId).NotNull();
+            RuleFor(x => x.RecruitmentMessages).NotNull();
         }
     }
 }

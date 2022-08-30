@@ -4,17 +4,7 @@ namespace MeMetrics.Infrastructure.SqlServer.RecruitmentMessages.Sql
     {
         public const string Value = @"
                         MERGE INTO [dbo].[RecruitmentMessage] AS TARGET
-                        USING (SELECT
-                             @RecruitmentMessageId as RecruitmentMessageId
-                            ,@RecruiterId as RecruiterId
-                            ,@MessageSource as MessageSource
-                            ,@RecruiterName as RecruiterName
-                            ,@RecruiterCompany as RecruiterCompany
-                            ,@Subject as Subject
-                            ,@Body as Body
-                            ,@IsIncoming as IsIncoming
-                            ,@OccurredDate as OccurredDate)
-                        AS SOURCE 
+                        USING @tvp AS SOURCE 
                         ON TARGET.RecruitmentMessageId = SOURCE.RecruitmentMessageId 
                         WHEN MATCHED THEN
 						UPDATE SET 

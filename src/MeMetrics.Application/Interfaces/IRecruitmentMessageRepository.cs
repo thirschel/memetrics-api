@@ -8,7 +8,7 @@ namespace MeMetrics.Application.Interfaces
     public interface IRecruitmentMessageRepository
     {
         Task<List<RecruitmentMessage>> GetRecruitmentMessages();
-        Task<int> InsertRecruitmentMessage(RecruitmentMessage recruitmentMessage);
+        Task<int> InsertRecruitmentMessages(IList<RecruitmentMessage> messages);
 
         Task<RecruitmentMessageMetrics> GetOverviewRecruitmentMessageMetrics(DateTime? startDate, DateTime endDate, DateTime? previousPeriodStartDate, DateTime? previousPeriodEndDate);
     }

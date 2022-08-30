@@ -7,6 +7,6 @@ namespace MeMetrics.Application.Interfaces
     public interface ITransactionRepository
     {
         Task<List<Transaction>> GetTransactions();
-        Task<int> InsertTransaction(Transaction transaction);
+        Task<int> InsertTransactions(List<Transaction> transactions);
     }
 }

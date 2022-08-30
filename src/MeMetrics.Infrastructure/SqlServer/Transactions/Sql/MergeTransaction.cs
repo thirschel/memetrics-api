@@ -4,20 +4,20 @@ namespace MeMetrics.Infrastructure.SqlServer.Transactions.Sql
     {
         public const string Value = @"
                         MERGE INTO [dbo].[Transaction] AS TARGET
-                        USING (SELECT
-                             @TransactionId as TransactionId
-                            ,@AccountId as AccountId
-                            ,@AccountName as AccountName
-                            ,@MerchantId as MerchantId
-                            ,@Amount as Amount
-                            ,@Description as Description
-                            ,@IsCashIn as IsCashIn
-                            ,@IsCashOut as IsCashOut
-                            ,@CategoryId as CategoryId
-                            ,@Labels as Labels
-                            ,@OccurredDate as OccurredDate)
-                        AS SOURCE 
+                        USING @tvp AS SOURCE 
                         ON TARGET.TransactionId = SOURCE.TransactionId 
+                        WHEN MATCHED THEN
+						UPDATE SET 
+						    TARGET.AccountId = SOURCE.AccountId,
+						    TARGET.AccountName = SOURCE.AccountName,
+						    TARGET.MerchantId = SOURCE.MerchantId,
+						    TARGET.Amount = SOURCE.Amount,
+						    TARGET.Description = SOURCE.Description,
+						    TARGET.IsCashIn = SOURCE.IsCashIn,
+						    TARGET.IsCashOut = SOURCE.IsCashOut,
+						    TARGET.CategoryId = SOURCE.CategoryId,
+						    TARGET.Labels = SOURCE.Labels,
+						    TARGET.OccurredDate = SOURCE.OccurredDate
                         WHEN NOT MATCHED THEN
                         INSERT 
                               (TransactionId

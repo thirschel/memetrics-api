@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,6 +14,8 @@ using MeMetrics.Infrastructure.SqlServer.Entities;
 using MeMetrics.Infrastructure.SqlServer.RecruitmentMessages.Sql;
 using MeMetrics.Infrastructure.SqlServer.Sql;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace MeMetrics.Infrastructure.SqlServer.RecruitmentMessages
 {
@@ -20,16 +23,19 @@ namespace MeMetrics.Infrastructure.SqlServer.RecruitmentMessages
     {
         private readonly IEntityMapper _entityMapper;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         private readonly IOptions<EnvironmentConfiguration> _configuration;
 
 
         public RecruitmentMessageRepository(
             IOptions<EnvironmentConfiguration> configuration,
             IEntityMapper entityMapper,
+            ILogger logger,
             IMapper mapper)
         {
             _configuration = configuration;
             _entityMapper = entityMapper;
+            _logger = logger;
             _mapper = mapper;
         }
 
@@ -42,22 +48,48 @@ namespace MeMetrics.Infrastructure.SqlServer.RecruitmentMessages
             }
         }
 
-        public async Task<int> InsertRecruitmentMessage(RecruitmentMessage message)
+        public async Task<int> InsertRecruitmentMessages(IList<RecruitmentMessage> messages)
         {
-            using (var connection = SqlConnectionBuilder.Build(_configuration.Value.DB_CONNECTION_STRING))
+            try {
+
+            var tvp = new DataTable();
+
+            tvp.Columns.Add(nameof(RecruitmentMessage.RecruitmentMessageId), typeof(string));
+            tvp.Columns.Add(nameof(RecruitmentMessage.RecruiterId), typeof(string));
+            tvp.Columns.Add(nameof(RecruitmentMessage.MessageSource), typeof(int));
+            tvp.Columns.Add(nameof(RecruitmentMessage.RecruiterName), typeof(string));
+            tvp.Columns.Add(nameof(RecruitmentMessage.RecruiterCompany), typeof(string));
+            tvp.Columns.Add(nameof(RecruitmentMessage.Subject), typeof(string));
+            tvp.Columns.Add(nameof(RecruitmentMessage.Body), typeof(string));
+            tvp.Columns.Add(nameof(RecruitmentMessage.IsIncoming), typeof(bool));
+            tvp.Columns.Add(nameof(RecruitmentMessage.OccurredDate), typeof(DateTimeOffset));
+
+            foreach (var message in messages)
             {
-                await connection.ExecuteAsync(MergeRecruitmentMessage.Value, new
+                var row = tvp.NewRow();
+                row[nameof(message.RecruitmentMessageId)] = message.RecruitmentMessageId;
+                row[nameof(message.RecruiterId)] = message.RecruiterId;
+                row[nameof(message.MessageSource)] = message.MessageSource;
+                row[nameof(message.RecruiterName)] = message.RecruiterName;
+                row[nameof(message.RecruiterCompany)] = message.RecruiterCompany;
+                row[nameof(message.Subject)] = message.Subject;
+                row[nameof(message.Body)] = message.Body;
+                row[nameof(message.IsIncoming)] = message.IsIncoming;
+                row[nameof(message.OccurredDate)] = message.OccurredDate;
+
+                tvp.Rows.Add(row);
+            }
+               using (var connection = SqlConnectionBuilder.Build(_configuration.Value.DB_CONNECTION_STRING))
                 {
-                    message.RecruitmentMessageId,
-                    message.RecruiterId,
-                    message.MessageSource,
-                    message.RecruiterName,
-                    message.RecruiterCompany,
-                    message.Subject,
-                    message.Body,
-                    message.IsIncoming,
-                    message.OccurredDate,
-                });
+                    await connection.ExecuteAsync(MergeRecruitmentMessage.Value, new {tvp = tvp.AsTableValuedParameter("dbo.RecruitmentMessageType") });
+                } 
+            }
+            catch(Exception e) {
+                foreach (var message in messages)
+                {
+                    _logger.Information(JsonConvert.SerializeObject(message));
+                }
+                throw e;
             }
 
             return 1;

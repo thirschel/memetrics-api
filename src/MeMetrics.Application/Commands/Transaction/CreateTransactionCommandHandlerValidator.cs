@@ -6,7 +6,7 @@ namespace MeMetrics.Application.Commands.Transaction
     {
         public CreateTransactionCommandValidator()
         {
-            RuleFor(x => x.Transaction.TransactionId).NotNull();
+            RuleFor(x => x.Transactions).NotNull();
         }
     }
 }

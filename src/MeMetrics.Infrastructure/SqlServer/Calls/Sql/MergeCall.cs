@@ -4,14 +4,7 @@ namespace MeMetrics.Infrastructure.SqlServer.Calls.Sql
     {
         public const string Value = @"
                         MERGE INTO [dbo].[Call] AS TARGET
-                        USING (SELECT
-                             @CallId as CallId
-                            ,@PhoneNumber as PhoneNumber
-                            ,@Name as Name
-                            ,@OccurredDate as OccurredDate
-                            ,@IsIncoming as IsIncoming
-                            ,@Duration as Duration)
-                        AS SOURCE 
+                        USING @tvp AS SOURCE 
                         ON TARGET.CallId = SOURCE.CallId 
                         WHEN NOT MATCHED THEN
                         INSERT 

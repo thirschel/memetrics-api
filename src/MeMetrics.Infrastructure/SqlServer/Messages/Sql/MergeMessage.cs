@@ -17,7 +17,7 @@ namespace MeMetrics.Infrastructure.SqlServer.Messages.Sql
 						    TARGET.Text = SOURCE.Text,
 						    TARGET.TextLength = SOURCE.TextLength,
 						    TARGET.ThreadId = SOURCE.ThreadId
-                            WHEN NOT MATCHED THEN
+                        WHEN NOT MATCHED THEN
                         INSERT 
                               (MessageId
                               ,PhoneNumber

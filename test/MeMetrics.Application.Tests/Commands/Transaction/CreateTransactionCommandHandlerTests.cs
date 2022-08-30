@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using MeMetrics.Application.Commands.Transaction;
 using MeMetrics.Application.Interfaces;
@@ -25,7 +26,7 @@ namespace MeMetrics.Application.Tests.Commands.Transaction
            );
 
            // ACT
-           var response = await handler.Handle(new CreateTransactionCommand() { Transaction = new Domain.Models.Transactions.Transaction() }, new CancellationToken());
+           var response = await handler.Handle(new CreateTransactionCommand() { Transactions = new List<Domain.Models.Transactions.Transaction>() { new Domain.Models.Transactions.Transaction() }}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.InvalidInput, response.Type);
@@ -45,14 +46,14 @@ namespace MeMetrics.Application.Tests.Commands.Transaction
                 validator
             );
 
-            transactionRepositoryMock.Setup(x => x.InsertTransaction(It.IsAny<Domain.Models.Transactions.Transaction>())).ReturnsAsync(1);
+            transactionRepositoryMock.Setup(x => x.InsertTransactions(It.IsAny<List<Domain.Models.Transactions.Transaction>>())).ReturnsAsync(1);
 
             // ACT
-            var response = await handler.Handle(new CreateTransactionCommand(){Transaction = new Domain.Models.Transactions.Transaction() { TransactionId = "1" }}, new CancellationToken());
+            var response = await handler.Handle(new CreateTransactionCommand(){Transactions = new List<Domain.Models.Transactions.Transaction>() { new Domain.Models.Transactions.Transaction() { TransactionId = "1" }}}, new CancellationToken());
 
            // ASSERT
            Assert.Equal(CommandResultTypeEnum.Success, response.Type);
-            transactionRepositoryMock.Verify(x => x.InsertTransaction(It.IsAny<Domain.Models.Transactions.Transaction>()), Times.Once);
+            transactionRepositoryMock.Verify(x => x.InsertTransactions(It.IsAny<List<Domain.Models.Transactions.Transaction>>()), Times.Once);
         }
 
         [Fact]
@@ -69,14 +70,14 @@ namespace MeMetrics.Application.Tests.Commands.Transaction
                 validator
             );
 
-            transactionRepositoryMock.Setup(x => x.InsertTransaction(It.IsAny<Domain.Models.Transactions.Transaction>())).ReturnsAsync(0);
+            transactionRepositoryMock.Setup(x => x.InsertTransactions(It.IsAny<List<Domain.Models.Transactions.Transaction>>())).ReturnsAsync(0);
 
             // ACT
-            var response = await handler.Handle(new CreateTransactionCommand() { Transaction = new Domain.Models.Transactions.Transaction() { TransactionId = "1" } }, new CancellationToken());
+            var response = await handler.Handle(new CreateTransactionCommand() { Transactions = new List<Domain.Models.Transactions.Transaction>() { new Domain.Models.Transactions.Transaction() { TransactionId = "1" } } }, new CancellationToken());
 
             // ASSERT
             Assert.Equal(CommandResultTypeEnum.UnprocessableEntity, response.Type);
-            transactionRepositoryMock.Verify(x => x.InsertTransaction(It.IsAny<Domain.Models.Transactions.Transaction>()), Times.Once);
+            transactionRepositoryMock.Verify(x => x.InsertTransactions(It.IsAny<List<Domain.Models.Transactions.Transaction>>()), Times.Once);
         }
     }
 }

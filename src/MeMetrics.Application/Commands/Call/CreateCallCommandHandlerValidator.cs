@@ -6,7 +6,7 @@ namespace MeMetrics.Application.Commands.Call
     {
         public CreateCallCommandValidator()
         {
-            RuleFor(x => x.Call).NotNull();
+            RuleFor(x => x.Calls).NotNull();
         }
     }
 }

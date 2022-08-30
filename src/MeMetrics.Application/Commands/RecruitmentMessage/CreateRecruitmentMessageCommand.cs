@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MediatR;
 using MeMetrics.Application.Models;
 
@@ -5,6 +6,6 @@ namespace MeMetrics.Application.Commands.RecruitmentMessage
 {
     public class CreateRecruitmentMessageCommand : IRequest<CommandResult<bool>>
     {
-        public Domain.Models.RecruitmentMessage.RecruitmentMessage RecruitmentMessage { get; set; }
+        public List<Domain.Models.RecruitmentMessage.RecruitmentMessage> RecruitmentMessages { get; set; }
     }
 }

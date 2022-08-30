@@ -14,6 +14,6 @@ namespace MeMetrics.Domain.Models.Transactions
         public bool IsCashOut { get; set; }
         public int CategoryId { get; set; }
         public string Labels { get; set; }
-        public DateTime OccurredDate { get; set; }
+        public DateTimeOffset OccurredDate { get; set; }
     }
 }

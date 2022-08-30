@@ -20,6 +20,6 @@ namespace MeMetrics.Domain.Models.RecruitmentMessage
 
         public bool IsIncoming { get; set; }
 
-        public DateTime OccurredDate { get; set; }
+        public DateTimeOffset OccurredDate { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace MeMetrics.Application.Commands.Call
                 _logger.Error("Create Call Command produced errors on validation {Errors}", validation.ToString());
                 return new CommandResult<bool>(result: false, type: CommandResultTypeEnum.InvalidInput);
             }
-            var rowsAffected = await _callRepository.InsertCall(command.Call);
+            var rowsAffected = await _callRepository.InsertCalls(command.Calls);
 
             if (rowsAffected == 0)
             {

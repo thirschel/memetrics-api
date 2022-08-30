@@ -33,7 +33,7 @@ namespace MeMetrics.Application.Commands.Transaction
                 _logger.Error("Create Ride Command produced errors on validation {Errors}", validation.ToString());
                 return new CommandResult<bool>(result: false, type: CommandResultTypeEnum.InvalidInput);
             }
-            var rowsAffected = await _transactionRepository.InsertTransaction(command.Transaction);
+            var rowsAffected = await _transactionRepository.InsertTransactions(command.Transactions);
 
             if (rowsAffected == 0)
             {

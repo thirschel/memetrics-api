@@ -31,7 +31,30 @@ namespace MeMetrics.Api.Controllers
         {
             var createTransactionCommand = new CreateTransactionCommand()
             {
-                Transaction = transaction,
+                Transactions = new List<Transaction> { transaction },
+            };
+            var result = await _mediator.Send(createTransactionCommand);
+
+            if (result.Type == CommandResultTypeEnum.InvalidInput)
+            {
+                return new BadRequestResult();
+            }
+
+            return new OkObjectResult(result.Result);
+        }
+
+        [Route("")]
+        [Authorize]
+        [HttpPost]
+        [ApiVersion("2")]
+        [ApiExplorerSettings(GroupName = "v2")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<bool>> SaveTransactions([FromBody] List<Transaction> transactions)
+        {
+            var createTransactionCommand = new CreateTransactionCommand()
+            {
+                Transactions = transactions,
             };
             var result = await _mediator.Send(createTransactionCommand);
 

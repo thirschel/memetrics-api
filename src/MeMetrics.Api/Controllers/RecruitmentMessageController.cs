@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using MeMetrics.Application.Commands.RecruitmentMessage;
@@ -31,7 +32,30 @@ namespace MeMetrics.Api.Controllers
         {
             var createRecruitmentMessageCommand = new CreateRecruitmentMessageCommand()
             {
-                RecruitmentMessage = message,
+                RecruitmentMessages = new List<RecruitmentMessage>() { message },
+            };
+            var result = await _mediator.Send(createRecruitmentMessageCommand);
+
+            if (result.Type == CommandResultTypeEnum.InvalidInput)
+            {
+                return new BadRequestResult();
+            }
+
+            return new OkObjectResult(result.Result);
+        }
+
+        [Route("")]
+        [Authorize]
+        [HttpPost]
+        [ApiVersion("2")]
+        [ApiExplorerSettings(GroupName = "v2")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<bool>> SaveRecruitmentMessages([FromBody] List<RecruitmentMessage> messages)
+        {
+            var createRecruitmentMessageCommand = new CreateRecruitmentMessageCommand()
+            {
+                RecruitmentMessages = messages,
             };
             var result = await _mediator.Send(createRecruitmentMessageCommand);
 
